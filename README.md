@@ -5,7 +5,7 @@ This script resign an IPA for AppStore or Adhoc Deployment. Is compatible with S
 
 #Usage
  1. Import the certificate in the Keychain
- 2. Generate a provisioning profile por Adhoc o AppStore Desployment
+ 2. Generate a provisioning profile for Adhoc o AppStore Desployment
  3. Run the script:
 	sh resign.sh /path/to/ipa /path/to/provisioning_profile Adhoc:YES|NO
 
