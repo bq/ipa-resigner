@@ -1,23 +1,29 @@
 ipa-resigner
 ===
 
-This script resign an IPA for AppStore or Adhoc Deployment. Is compatible with Swift Code.
+This script resigns an IPA for AppStore or Adhoc Deployment. 
+It is compatible with Swift Code.
 
-#Usage
- 1. Import the certificate in the Keychain
- 2. Generate a provisioning profile for Adhoc o AppStore Desployment
- 3. Run the script:
-	sh resign.sh /path/to/ipa /path/to/provisioning_profile Adhoc:YES|NO
+##Requirements
+- OSX Mavericks or Yosemite
+- Xcode 6+
+- Xcode command line tools
+- A valid developer account with the iOS Developer Program
+
+##Usage
+ 1. Generate one distribution certificate in the member center (http://developer.apple.com -> `Member Center` -> `Certificates, Identifiers & Profiles`) 
+ 2. Import the new certificate in the Keychain of your MAC: be sure to keep the Keychain clean and remove old certificates.
+ 3. Generate the proviosining profile for the previous certificate.
+    1. In the `Member Center` create a new provisioning profile for AppStore Distribution. In case you want to install the new IPA through iTunes in your devices, remember that you should use an Adhoc provisioning profile.
+    2. Download the new file (i.e. the previously provisioning profile generated) and store it in a known location of your MAC
+ 4. Run the script with the following parameters:  
+	`sh resign.sh /path/to/ipa /path/to/provisioning_profile Adhoc:YES|NO`
 
 ####Example for Adhoc Resign:
 	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision YES
 ####Example for AppStore Resign:
 	sh resign.sh MyApp.ipa AppStore_deployment.mobileprovision NO
 
-##Requirements
-- OSX Mavericks or Yosemite
-- Xcode 6+
-- Xcode command line tools
 
 #License
 This script is distributed in terms of LGPL license. See http://www.gnu.org/licenses/lgpl.html for more details.
