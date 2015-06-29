@@ -5,8 +5,8 @@ This script resigns an IPA for AppStore or Adhoc Deployment.
 It is compatible with Swift Code.
 
 ##Requirements
-- OSX Mavericks or Yosemite
-- Xcode 6+
+- Mac with OSX Yosemite (or later)
+- Xcode 6 (or later)
 - Xcode command line tools
 - A valid developer account with the iOS Developer Program
 
