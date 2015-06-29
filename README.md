@@ -1,7 +1,7 @@
 ipa-resigner
 ===
 
-This script resign an IPA for AppStore Deployment or Adhoc Deployment. Is compatible with Swift Code.
+This script resign an IPA for AppStore or Adhoc Deployment. Is compatible with Swift Code.
 
 #Usage
  1. Import the certificate in the Keychain
