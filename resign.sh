@@ -1,18 +1,13 @@
 #!/bin/bash
 IPA=$1
 PROVISIONING_PROFILE=$2
-ADHOC=$3
 
 if [ "$IPA" == "" ];
 then
-    echo "Usage: sh resign.sh ipa_path provisioning_path [adhoc_signing:YES|NO]"
+    echo "Usage: sh resign.sh ipa_path provisioning_path"
     exit 1
 fi
 
-if [ "$ADHOC" == "" ];
-then
-    ADHOC="NO"
-fi
 
 if [ ! -f "$IPA" ];
 then
@@ -49,6 +44,17 @@ SIGNING_IDENTITY=$(security find-identity -p codesigning -v | grep "${TEAM_IDENT
 echo "Signing Identity: ${SIGNING_IDENTITY}"
 BUNDLE_IDENTIFIER=$(/usr/libexec/Plistbuddy -c "Print :CFBundleIdentifier" ipa_content/Payload/${APP_NAME}/Info.plist)
 echo "Bundle Identifier: ${BUNDLE_IDENTIFIER}"
+PROVISIONING_DEVICES=$(/usr/libexec/Plistbuddy -c "Print :ProvisionedDevices" "${PROVISIONING_PROFILE_DECRYPTED}")
+if [ "$PROVISIONING_DEVICES" == "" ];
+then
+    echo "Provisioning profile WITHOUT attached devices"
+    HAS_DEVICES="NO"
+else
+    echo "Provisioning profile WITH attached devices"
+    HAS_DEVICES="YES"
+fi
+PROVISIONING_GET_TASK_ALLOW=$(/usr/libexec/Plistbuddy -c "Print :Entitlements:get-task-allow" "${PROVISIONING_PROFILE_DECRYPTED}")
+echo "Provisioning get-task-allow: ${PROVISIONING_GET_TASK_ALLOW}"
 echo
 
 /bin/rm "${PROVISIONING_PROFILE_DECRYPTED}"
@@ -66,11 +72,11 @@ then
 	rm -f ${APP_ENTITLEMENTS}
 fi 
 /usr/libexec/PlistBuddy -c "Add :application-identifier string ${APPLICATION_IDENTIFIER_PREFIX}.${BUNDLE_IDENTIFIER}" "${APP_ENTITLEMENTS}"
-if [ ${ADHOC} == "NO" ]
+if [ ${HAS_DEVICES} == "NO" ] && [ ${PROVISIONING_GET_TASK_ALLOW} == "false" ]
 then
 	/usr/libexec/PlistBuddy -c "Add :beta-reports-active bool true" "${APP_ENTITLEMENTS}"
 fi
-/usr/libexec/PlistBuddy -c "Add :get-task-allow bool false" "${APP_ENTITLEMENTS}"
+/usr/libexec/PlistBuddy -c "Add :get-task-allow bool ${PROVISIONING_GET_TASK_ALLOW}" "${APP_ENTITLEMENTS}"
 /usr/libexec/PlistBuddy -c "Add :keychain-access-groups array" "${APP_ENTITLEMENTS}"
 /usr/libexec/PlistBuddy -c "Add :keychain-access-groups:0 string ${APPLICATION_IDENTIFIER_PREFIX}.${BUNDLE_IDENTIFIER}" "${APP_ENTITLEMENTS}"
 cp "${APP_ENTITLEMENTS}" "ipa_content/Payload/${APP_NAME}/archived-expanded-entitlements.xcent"
@@ -94,11 +100,14 @@ zip --symlinks --verbose --recurse-paths ../${IPA_RESIGNED} .
 echo
 echo "***************************"
 echo
-if [ ${ADHOC} == "NO" ]
+if [ ${HAS_DEVICES} == "NO" ] && [ ${PROVISIONING_GET_TASK_ALLOW} == "false" ]
 then
-    echo "IPA succesfully signed for AppStore Distribution. This binary is not compatible for AdHoc Deployment."
-else
+    echo "IPA succesfully signed for AppStore Distribution. This binary is NOT COMPATIBLE for AdHoc Deployment or Development."
+elif [ ${HAS_DEVICES} == "YES" ] && [ ${PROVISIONING_GET_TASK_ALLOW} == "false" ]
+then
     echo "IPA succesfully signed for AdHoc Distribution. This binary is not compatible for AppStore Deployment."
+else
+    echo "IPA succesfully signed for Development Distribution. This binary is NOT COMPATIBLE for AppStore Deployment or Adhoc Distribution."
 fi
 
 echo 
