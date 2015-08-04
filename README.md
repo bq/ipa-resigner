@@ -1,7 +1,7 @@
 ipa-resigner
 ===
 
-This script resigns an IPA for AppStore, Adhoc or Development Deployment.
+This script re-signs an IPA for AppStore, Adhoc or Development Deployment.
 It is compatible with Swift Code.
 
 ##Requirements
@@ -20,11 +20,11 @@ It is compatible with Swift Code.
  4. Run the script with the following parameters:  
 	`sh resign.sh /path/to/ipa /path/to/provisioning_profile "iPhone Developer/Distribution: **Team Member Name**"`
 
-####Example for Development Resign:
+####Example for Development Re-sign:
 	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision "iPhone Developer: MyTeam Member (XXXXXXXXXX)"
-####Example for Adhoc Resign:
+####Example for Adhoc Re-sign:
 	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision "iPhone Distribution: MyTeam Member (XXXXXXXXXX)"
-####Example for AppStore Resign:
+####Example for AppStore Re-sign:
 	sh resign.sh MyApp.ipa AppStore_deployment.mobileprovision "iPhone Distribution: MyTeam Member (XXXXXXXXXX)"
 
 
