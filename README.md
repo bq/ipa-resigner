@@ -20,10 +20,12 @@ It is compatible with Swift Code.
  4. Run the script with the following parameters:  
 	`sh resign.sh /path/to/ipa /path/to/provisioning_profile "iPhone Developer/Distribution: **Team Member Name**"`
 
+####Example for Development Resign:
+	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision "iPhone Developer: MyTeam Member (XXXXXXXXXX)"
 ####Example for Adhoc Resign:
-	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision "iPhone Developer/Distribution: MyTeam Member (XXXXXXXXXX)"
+	sh resign.sh MyApp.ipa Adhoc_deployment.mobileprovision "iPhone Distribution: MyTeam Member (XXXXXXXXXX)"
 ####Example for AppStore Resign:
-	sh resign.sh MyApp.ipa AppStore_deployment.mobileprovision "iPhone Developer/Distribution: MyTeam Member (XXXXXXXXXX)"
+	sh resign.sh MyApp.ipa AppStore_deployment.mobileprovision "iPhone Distribution: MyTeam Member (XXXXXXXXXX)"
 
 
 #License
